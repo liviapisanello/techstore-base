@@ -7,8 +7,20 @@ import Loja from './pages/Loja'
 import PaginaProduto from './pages/PaginaProduto'
 import Carrinho from './pages/Carrinho'
 import Estoque from './pages/Estoque'
+import DashboardDono from './pages/DashboardDono'
 import { buscarProdutos } from './services/produtos'
 import { buscarClientes } from './services/clientes'
+
+const STORAGE_KEY_ESPERA = 'techstore-espera'
+
+function lerEsperando() {
+  try {
+    const salvo = localStorage.getItem(STORAGE_KEY_ESPERA)
+    return salvo ? JSON.parse(salvo) : []
+  } catch {
+    return []
+  }
+}
 
 export default function App() {
   const [produtos, setProdutos] = useState([])
@@ -17,6 +29,7 @@ export default function App() {
   const [carrinho, setCarrinho] = useState([])
   const [clientes, setClientes] = useState([])
   const [clienteAtualId, setClienteAtualId] = useState(null)
+  const [esperando, setEsperando] = useState(lerEsperando)
 
   useEffect(() => {
     buscarProdutos()
@@ -29,6 +42,10 @@ export default function App() {
       if (dados.length > 0) setClienteAtualId(dados[0].id)
     })
   }, [])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_ESPERA, JSON.stringify(esperando))
+  }, [esperando])
 
   function adicionarAoCarrinho(produto) {
     setCarrinho(carrinho.concat(produto))
@@ -46,6 +63,43 @@ export default function App() {
         return true
       })
     )
+  }
+
+  function registrarAvisoProduto(produtoId, nome, email) {
+    setProdutos((produtosAtuais) =>
+      produtosAtuais.map((produto) =>
+        String(produto.id) === String(produtoId)
+          ? { ...produto, estoque: Number(produto.estoque) + 1 }
+          : produto
+      )
+    )
+
+    const produtoAtual = produtos.find((produto) => String(produto.id) === String(produtoId))
+
+    setEsperando((atual) => {
+      const nomeFormatado = nome.trim()
+      const emailFormatado = email.trim()
+      const jaExiste = atual.some(
+        (item) =>
+          String(item.produtoId) === String(produtoId) &&
+          item.email.toLowerCase() === emailFormatado.toLowerCase()
+      )
+
+      if (jaExiste) {
+        return atual
+      }
+
+      return [
+        ...atual,
+        {
+          produtoId: String(produtoId),
+          produto: produtoAtual?.title ?? 'Produto',
+          nome: nomeFormatado,
+          email: emailFormatado,
+          cadastradoEm: new Date().toISOString(),
+        },
+      ]
+    })
   }
 
   const clienteAtual = clientes.find((cliente) => cliente.id === clienteAtualId)
@@ -67,7 +121,13 @@ export default function App() {
             />
             <Route
               path="/produto/:id"
-              element={<PaginaProduto produtos={produtos} onAdicionar={adicionarAoCarrinho} />}
+              element={
+                <PaginaProduto
+                  produtos={produtos}
+                  onAdicionar={adicionarAoCarrinho}
+                  onRegistrarAviso={registrarAvisoProduto}
+                />
+              }
             />
             <Route
               path="/carrinho"
@@ -81,7 +141,11 @@ export default function App() {
                 />
               }
             />
-            <Route path="/estoque" element={<Estoque produtos={produtos} />} />
+            <Route path="/estoque" element={<Estoque produtos={produtos} esperando={esperando} />} />
+            <Route
+              path="/dono"
+              element={<DashboardDono produtos={produtos} esperando={esperando} />}
+            />
           </Routes>
         )}
       </main>

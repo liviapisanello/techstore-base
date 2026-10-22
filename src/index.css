@@ -218,6 +218,7 @@ h2 {
 }
 
 .mini-carrinho {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--espaco-2);
@@ -230,6 +231,25 @@ h2 {
 
 .mini-carrinho:hover {
   border-color: var(--cor-texto);
+}
+
+.mini-carrinho-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #d93025;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(217, 48, 37, 0.25);
 }
 
 .mini-carrinho-icone {
@@ -395,7 +415,7 @@ h2 {
   font-size: 0.85rem;
 }
 
-.preco-original + .preco {
+.preco-original+.preco {
   color: var(--cor-destaque);
 }
 
@@ -573,6 +593,96 @@ h2 {
   color: var(--cor-frete);
 }
 
+.lista-espera {
+  margin-top: var(--espaco-6);
+  display: grid;
+  gap: var(--espaco-3);
+}
+
+.lista-espera h2 {
+  margin: 0;
+}
+
+.vazio-espera {
+  margin: 0;
+}
+
+.dashboard-resumo {
+  display: grid;
+  gap: var(--espaco-4);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin: var(--espaco-5) 0;
+}
+
+.dashboard-card {
+  padding: var(--espaco-4);
+  display: grid;
+  gap: var(--espaco-2);
+}
+
+.dashboard-card strong {
+  font-size: 1.4rem;
+}
+
+.dashboard-label {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dashboard-tabela {
+  margin-top: var(--espaco-5);
+}
+
+.dashboard-nota {
+  margin-top: var(--espaco-4);
+}
+
+.alerta-esgotado {
+  background: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  padding: var(--espaco-4);
+  display: grid;
+  gap: var(--espaco-3);
+}
+
+.alerta-titulo {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.form-aviso {
+  display: grid;
+  gap: var(--espaco-3);
+}
+
+.campo-aviso {
+  display: grid;
+  gap: var(--espaco-2);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.campo-aviso input {
+  width: 100%;
+  padding: var(--espaco-3);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pequeno);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+}
+
+.mensagem-aviso {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cor-frete);
+}
+
 .detalhe-garantias {
   list-style: none;
   margin: 0;
@@ -622,7 +732,7 @@ h2 {
   padding: var(--espaco-4);
 }
 
-.item-carrinho + .item-carrinho {
+.item-carrinho+.item-carrinho {
   border-top: 1px solid var(--cor-borda);
 }
 

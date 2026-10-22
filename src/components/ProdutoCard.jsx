@@ -4,6 +4,11 @@ import { formatarPreco } from '../utils/formatarPreco'
 export default function ProdutoCard({ produto, onAdicionar }) {
   const esgotado = produto.estoque === 0
 
+  function adicionarEConfirmar() {
+    onAdicionar(produto)
+    window.alert(`${produto.title} foi adicionado ao carrinho.`)
+  }
+
   return (
     <article className="card">
       <Link to={`/produto/${produto.id}`} className="card-link">
@@ -29,7 +34,7 @@ export default function ProdutoCard({ produto, onAdicionar }) {
         {esgotado && <span className="selo selo-esgotado">Esgotado</span>}
       </div>
 
-      <button className="botao" onClick={() => onAdicionar(produto)} disabled={esgotado}>
+      <button className="botao" onClick={adicionarEConfirmar} disabled={esgotado}>
         Adicionar ao carrinho
       </button>
     </article>
