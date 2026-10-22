@@ -1,6 +1,11 @@
 import { formatarPreco } from '../utils/formatarPreco'
 
 export default function SugestaoItem({ produto, onAdicionar }) {
+  function adicionarEConfirmar() {
+    onAdicionar(produto)
+    window.alert(`${produto.title} foi adicionado ao carrinho.`)
+  }
+
   return (
     <div className="sugestao">
       <div className="sugestao-imagem-moldura">
@@ -10,7 +15,7 @@ export default function SugestaoItem({ produto, onAdicionar }) {
         <p className="sugestao-titulo">{produto.title}</p>
         <p className="preco preco-pequeno">{formatarPreco(produto.price)}</p>
       </div>
-      <button className="botao botao-pequeno" onClick={() => onAdicionar(produto)}>
+      <button className="botao botao-pequeno" onClick={adicionarEConfirmar}>
         Comprar
       </button>
     </div>
